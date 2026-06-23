@@ -1,0 +1,19 @@
+services:
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lms-user-service:local
+    container_name: lms-user-service
+    ports:
+      - "${HOST_PORT:-8083}:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SERVER_PORT: 8083
+      DB_URL: ${DB_URL:-jdbc:sqlserver://host.docker.internal:1433;databaseName=DB_LMS;encrypt=false;trustServerCertificate=true}
+      DB_USERNAME: ${DB_USERNAME:-lms_app}
+      DB_PASSWORD: ${DB_PASSWORD:-}
+      JAVA_OPTS: ${JAVA_OPTS:--Xms256m -Xmx512m -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:+UseStringDeduplication -Djava.security.egd=file:/dev/./urandom}
+    mem_limit: ${CONTAINER_MEMORY_LIMIT:-768m}
+    cpus: ${CONTAINER_CPU_LIMIT:-1.0}
+    restart: unless-stopped
