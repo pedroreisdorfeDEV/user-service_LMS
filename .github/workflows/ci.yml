@@ -29,3 +29,6 @@ jobs:
 
       - name: Build e testes
         run: mvn clean verify
+
+      - name: Build Docker image
+        run: docker build -t lms-user-service:${{ github.sha }} .
